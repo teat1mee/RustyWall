@@ -30,7 +30,7 @@ A lightweight, blazingly fast CLI utility written in Rust to manage your GNOME d
 
     From URL: ./target/release/RustyWall https://example.com/image.jpg
 
-Вариант 2: На русском (Если хочешь описание для себя/русскоязычных друзей)
+
 🦀 RustyWall
 
 Легкая и быстрая консольная утилита на Rust для управления обоями рабочего стола в среде GNOME. Больше не нужно вручную скачивать и устанавливать картинки — RustyWall сделает это за вас.
