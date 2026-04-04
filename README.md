@@ -1,6 +1,7 @@
 🦀 RustyWall
 
 A lightweight, blazingly fast CLI utility written in Rust to manage your GNOME desktop wallpapers. Whether you have a local collection or found a cool image online, RustyWall handles it for you.
+
 🚀 Features
 
     🖼️ Local Randomizer: Automatically picks a random image from any specified directory.
@@ -34,6 +35,7 @@ A lightweight, blazingly fast CLI utility written in Rust to manage your GNOME d
 🦀 RustyWall
 
 Легкая и быстрая консольная утилита на Rust для управления обоями рабочего стола в среде GNOME. Больше не нужно вручную скачивать и устанавливать картинки — RustyWall сделает это за вас.
+
 🚀 Возможности
 
     🖼️ Случайный выбор: Автоматически выбирает случайное изображение из локальной папки.
