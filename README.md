@@ -1,53 +1,64 @@
 🦀 RustyWall
 
-A lightweight, blazingly fast CLI utility written in Rust to manage your GNOME desktop wallpapers. Whether you have a local collection or found a cool image online, RustyWall handles it for you.
+RustyWall — это легкая и быстрая консольная утилита на Rust для управления обоями рабочего стола в среде GNOME. Программа позволяет как выбирать случайные изображения из локальных папок, так и скачивать новые обои напрямую из интернета по ссылке.
 
-🚀 Features
+Этот проект создан в процессе изучения языка Rust и демонстрирует работу с сетевыми запросами, файловой системой и аргументами командной строки.
+🚀 Основные возможности
 
-    🖼️ Local Randomizer: Automatically picks a random image from any specified directory.
+    🖼️ Локальный режим: Автоматический выбор случайного изображения из указанной директории.
 
-    🌐 Web Downloader: Provide a direct URL, and the tool will download and apply the wallpaper instantly.
+    🌐 Сетевой режим: Загрузка изображения по прямой ссылке с автоматическим извлечением имени файла.
 
-    🛡️ Robust Error Handling: Built-in checks for network timeouts, invalid paths, and server-side errors.
+    🛡️ Надежность:
 
-    🐧 Linux Native: Optimized for GNOME environments using gsettings.
+        Использование User-Agent для обхода блокировок со стороны серверов.
 
-🛠 Installation
+        Настраиваемые таймауты соединения (30 сек).
 
-    Clone the repository:
+        Безопасная обработка ошибок через Result и Option.
+
+    🐧 Нативно для Linux: Работает напрямую с системными ключами gsettings (поддерживает светлую и темную темы GNOME).
+
+🛠 Установка
+
+Для сборки вам понадобится установленный Rust.
+
+    Склонируйте репозиторий:
     code Bash
 
-    git clone git@github.com:teat1mee/RustyWall.git
+    git clone https://github.com/teat1mee/RustyWall.git
     cd RustyWall
 
-    Build and run:
+    Соберите проект:
     code Bash
 
     cargo build --release
 
-📖 Usage
+    Исполняемый файл будет находиться в target/release/rand_wallpaper.
 
-    From local folder: ./target/release/RustyWall /home/user/Pictures/Wallpapers
+📖 Использование
 
-    From URL: ./target/release/RustyWall https://example.com/image.jpg
+Запуск утилиты осуществляется через флаги -url или -dir.
+1. Установка случайных обоев из папки:
+code Bash
 
+./target/release/rand_wallpaper -dir /home/user/Pictures/Wallpapers
 
-🦀 RustyWall
+2. Установка обоев по прямой ссылке:
+code Bash
 
-Легкая и быстрая консольная утилита на Rust для управления обоями рабочего стола в среде GNOME. Больше не нужно вручную скачивать и устанавливать картинки — RustyWall сделает это за вас.
+./target/release/rand_wallpaper -url https://images.pexels.com/photos/15286/pexels-photo.jpg
 
-🚀 Возможности
+📦 Зависимости
 
-    🖼️ Случайный выбор: Автоматически выбирает случайное изображение из локальной папки.
+Проект использует следующие библиотеки (crates):
 
-    🌐 Загрузка из сети: Просто вставьте прямую ссылку на картинку, и утилита сама скачает и установит её.
+    reqwest — мощный HTTP-клиент для скачивания файлов.
 
-    🛡️ Надежность: Обработка сетевых таймаутов, ошибок доступа и проверка путей на лету.
+    rand — генерация случайных чисел для выбора файлов.
 
-    🐧 Нативно для Linux: Работает напрямую с gsettings в GNOME.
+    std::env — работа с аргументами командной строки.
 
-📖 Как пользоваться
+🛡 Лицензия
 
-    Из папки: ./RustyWall /путь/к/папке/с/обоями
-
-    По ссылке: ./RustyWall https://ссылка.com/картинка.jpg
+Данный проект является учебным и распространяется под лицензией MIT.
