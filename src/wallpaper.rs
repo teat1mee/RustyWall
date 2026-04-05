@@ -5,6 +5,13 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 pub fn get_random_wallpaper(dir_path: &Path) -> Result<PathBuf, Box<dyn Error>> {
+    if !dir_path.exists() {
+        return Err(format!("Ошибка: Путь '{}' не существует", dir_path.display()).into());
+    }
+    if !dir_path.is_dir() {
+        return Err(format!("Ошибка: '{}' не является папкой", dir_path.display()).into());
+    }
+
     let wallpapers: Vec<PathBuf> = fs::read_dir(dir_path)?
         .filter_map(|entry| entry.ok())
         .map(|entry| entry.path())

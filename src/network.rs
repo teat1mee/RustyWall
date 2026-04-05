@@ -5,7 +5,15 @@ use std::path::{Path, PathBuf};
 use std::time::Duration;
 
 pub fn download_image(url: &str, name_wallpaper: &str) -> Result<PathBuf, Box<dyn Error>> {
-    let save_path = Path::new("/home/tea/Изображения/Wallpaper").join(name_wallpaper);
+    let home_dir = std::env::var("HOME")?;
+    let save_dir = Path::new(&home_dir).join("Изображения/Wallpaper");
+
+    if save_dir.exists() {
+        println!("Папка не найдена. Создаю: {}", save_dir.display());
+        fs::create_dir_all(&save_dir)?;
+    }
+
+    let save_path = save_dir.join(name_wallpaper);
 
     let client = reqwest::blocking::Client::builder()
         .user_agent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36")
