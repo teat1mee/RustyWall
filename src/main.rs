@@ -1,31 +1,48 @@
 use rand::prelude::IndexedRandom;
+use std::env;
 use std::error::Error;
 use std::fs;
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::time::Duration;
-use std::env;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() < 3 {
-        println!("Использование:\n  rustywall -url <ссылка>\n  rustywall -dir <путь>");
+    if args.len() < 2 {
+        println!("Используйте: rustywall -h для справки");
         return Ok(());
     }
 
     let flag = &args[1];
-    let value = &args[2];
 
     let wallpaper_path: PathBuf = match flag.as_str() {
+        "-h" | "--help" => {
+            println!("Использование:");
+            println!("  rustywall -url <ссылка>");
+            println!("  rustywall -dir <путь>");
+            println!("\nСовет по качеству:");
+            println!("  Используйте прямые ссылки с фотостоков (Unsplash, Pexels),");
+            println!("  чтобы избежать размытых изображений.");
+
+            return Ok(());
+        }
         "-url" => {
+            let value = args.get(2).ok_or("Ошибка: Вы не ввели URL")?;
             println!("Режим: Загрузка по ссылке...");
-            let name = value.split('/').last().unwrap_or("wall.jpg")
-                .split('?').next().unwrap_or("wall.jpg");
+            let name = value
+                .split('/')
+                .last()
+                .unwrap_or("wall.jpg")
+                .split('?')
+                .next()
+                .unwrap_or("wall.jpg");
             download_image(value, name)?
         }
         "-dir" => {
+            let value = args.get(2).ok_or("Ошибка: Вы не ввели путь")?;
+
             println!("Режим: Случайные обои из папки...");
             get_random_wallpaper(Path::new(value))?
         }
@@ -63,6 +80,16 @@ fn download_image(url: &str, name_wallpaper: &str) -> Result<PathBuf, Box<dyn Er
     let mut file = fs::File::create(&save_path)?;
     std::io::copy(&mut response, &mut file)?;
 
+    let metadata = fs::metadata(&save_path)?;
+    let size_kb = metadata.len() / 1024;
+    println!("Загрузка завершена. Размер файла: {} KB", size_kb);
+
+    if size_kb < 200 {
+        println!(
+            "Предупреждение: Файл очень маленький. Скорее всего, это превью,качество будет плохим!"
+        )
+    }
+
     Ok(save_path)
 }
 
@@ -78,7 +105,9 @@ fn get_random_wallpaper(dir_path: &Path) -> Result<PathBuf, Box<dyn Error>> {
     }
 
     let mut rng = rand::rng();
-    let selected = wallpapers.choose(&mut rng).ok_or("Не удалось выбрать файл")?;
+    let selected = wallpapers
+        .choose(&mut rng)
+        .ok_or("Не удалось выбрать файл")?;
 
     Ok(selected.clone())
 }
