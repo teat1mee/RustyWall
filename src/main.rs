@@ -64,7 +64,7 @@ fn download_image(url: &str, name_wallpaper: &str) -> Result<PathBuf, Box<dyn Er
 
     let client = reqwest::blocking::Client::builder()
         .user_agent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36")
-        .timeout(Duration::from_secs(30))
+        .timeout(Duration::from_secs(60))
         .connect_timeout(Duration::from_secs(10))
         .build()?;
 
@@ -77,19 +77,27 @@ fn download_image(url: &str, name_wallpaper: &str) -> Result<PathBuf, Box<dyn Er
         return Err(format!("Ошибка сервера: {}", response.status()).into());
     }
 
+    let content_length = response.content_length();
+
     let mut file = fs::File::create(&save_path)?;
-    std::io::copy(&mut response, &mut file)?;
 
-    let metadata = fs::metadata(&save_path)?;
-    let size_kb = metadata.len() / 1024;
-    println!("Загрузка завершена. Размер файла: {} KB", size_kb);
+    let bytes_written = std::io::copy(&mut response, &mut file)?;
 
-    if size_kb < 200 {
-        println!(
-            "Предупреждение: Файл очень маленький. Скорее всего, это превью,качество будет плохим!"
-        )
+    if let Some(expected) = content_length {
+        if bytes_written < expected {
+            fs::remove_file(&save_path)?;
+            return Err(format!(
+                "Ошибка: Файл скачан не полностью ({} из {} байт)",
+                bytes_written, expected
+            )
+            .into());
+        }
     }
 
+    println!(
+        "\nЗагрузка завершена успешно. Записано: {} байт",
+        bytes_written
+    );
     Ok(save_path)
 }
 
